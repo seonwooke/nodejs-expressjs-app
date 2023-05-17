@@ -1,7 +1,10 @@
 const path = require('path');
 
 function getPost(req, res) {
-  res.sendFile(path.join(__dirname, '..', 'public', 'images', 'background2.jpeg'));
+  res.render('posts', {
+    templateName: 'post'
+  });
+  // res.sendFile(path.join(__dirname, '..', 'public', 'images', 'background2.jpeg'));
 }
 
 module.exports = {
