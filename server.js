@@ -14,9 +14,32 @@ const Users = [
 ]
 
 const app = express();
+app.use(express.json());
+
+app.use((req, res, next) => {
+  const start = Date.now();
+  console.log(`start: ${req.method} ${req.url}`);
+  next();
+  const diffTime = Date.now() - start;
+  console.log(`end: ${req.method} ${req.url} ${diffTime}ms`);
+});
+
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
 
 app.get('/users', (req, res) => {
   res.send(Users);
+});
+
+app.post('/users', (req, res) => {
+  console.log('req.body.name', req.body.name);
+  const newUser = {
+    name: req.body.name,
+    id: Users.length
+  };
+  Users.push(newUser);
+  res.json(newUser);
 });
 
 app.get('/users/:userId', (req, res) => {
@@ -27,10 +50,6 @@ app.get('/users/:userId', (req, res) => {
   } else {
     res.sendStatus(404);
   }
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
 });
 
 app.listen(PORT, () => {
